@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Meu Bolso Floripa</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+  </style>
+</head>
+<body class="bg-slate-100/90 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-full font-sans antialiased flex flex-col justify-between selection:bg-emerald-500 selection:text-white transition-colors duration-200">
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 py-3 flex items-center justify-between shadow-xs">
+    <div class="flex items-center space-x-2.5">
+      <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-sm font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">Meu Bolso Floripa</h1>
+        <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500" id="currentMonthYear">Novembro / 2026</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-1.5">
+      <!-- Dark mode switch -->
+      <button id="themeToggleBtn" aria-label="Alternar tema" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition">
+        <svg id="moonIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg id="sunIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+
+      <!-- Salary quick edit -->
+      <button id="openSalaryModalBtn" class="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+        <span>R$ <span id="topSalaryVal">5.600</span></span>
+        <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="sticky top-[57px] z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 px-3 py-2 flex items-center justify-center">
+    <div class="grid grid-cols-4 gap-1 bg-slate-100 dark:bg-slate-800/90 p-1 rounded-2xl w-full max-w-md">
+      <button id="tabBtnBolso" class="tab-button active py-2 text-[11px] font-bold rounded-xl transition-all shadow-xs bg-white text-slate-900 dark:bg-slate-700 dark:text-white">
+        🎯 Bolso
+      </button>
+      <button id="tabBtnFixos" class="tab-button py-2 text-[11px] font-bold rounded-xl transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
+        📝 Planilha
+      </button>
+      <button id="tabBtnBalanco" class="tab-button py-2 text-[11px] font-bold rounded-xl transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
+        📊 Balanço
+      </button>
+      <button id="tabBtnHistorico" class="tab-button py-2 text-[11px] font-bold rounded-xl transition-all text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
+        📁 Histórico
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN VIEW CONTAINER -->
+  <main class="flex-1 w-full max-w-md mx-auto px-4 py-4 pb-28">
+
+    <!-- ========================================== -->
+    <!-- ABA 1: BOLSO LIVRE (ESTILO DE VIDA R$ 1000) -->
+    <!-- ========================================== -->
+    <section id="viewBolso" class="space-y-4">
+      
+      <!-- HERO CARD BOLSO LIVRE -->
+      <div class="relative overflow-hidden rounded-3xl p-5 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 text-white shadow-xl shadow-slate-900/10 border border-slate-700/60">
+        <div id="heroGlow" class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/20 blur-2xl pointer-events-none transition-all duration-500"></div>
+
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-1.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              Estilo de Vida
+            </span>
+            <span class="text-[11px] text-slate-400">Lazer, Uber & Extras</span>
+          </div>
+          <button id="openBudgetGoalModalBtn" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition">
+            <span>Teto: R$ <span id="displayBudgetGoal">1.000,00</span></span>
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+        </div>
+
+        <!-- Remaining Balance -->
+        <div class="mt-2">
+          <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Saldo disponível para o mês</p>
+          <div class="flex items-baseline space-x-1 mt-0.5">
+            <span id="heroRemainSign" class="text-xl font-bold text-slate-300">R$</span>
+            <span id="heroRemainingAmount" class="text-3xl font-extrabold tracking-tight text-white transition-all">1.000,00</span>
+          </div>
+        </div>
+
+        <!-- Visual Progress Bar -->
+        <div class="mt-4">
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700/60">
+            <div id="heroProgressBar" class="h-full rounded-full bg-emerald-400 transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1.5 font-medium">
+            <span>Gasto: <strong class="text-slate-100 font-bold" id="heroSpentAmount">R$ 0,00</strong></span>
+            <span id="heroPercentText" class="font-bold text-emerald-400">0% usado</span>
+          </div>
+        </div>
+
+        <!-- Intelligent Pacing (Day / Weekend) -->
+        <div class="mt-4 pt-3.5 border-t border-slate-700/60 grid grid-cols-2 gap-2 text-center">
+          <div class="bg-slate-800/70 rounded-2xl p-2.5 border border-slate-700/40 backdrop-blur-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Ritmo Diário</span>
+            <span id="paceDailyAmount" class="text-sm font-extrabold text-slate-100 mt-0.5 block">R$ 33,33</span>
+            <span id="daysRemainingText" class="text-[10px] text-slate-400 font-medium">calculando dias...</span>
+          </div>
+          <div class="bg-slate-800/70 rounded-2xl p-2.5 border border-slate-700/40 backdrop-blur-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Por Fim de Semana</span>
+            <span id="paceWeeklyAmount" class="text-sm font-extrabold text-slate-100 mt-0.5 block">R$ 250,00</span>
+            <span id="weekendsRemainingText" class="text-[10px] text-slate-400 font-medium">fins de semana restantes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY MINI TOTALS -->
+      <div class="grid grid-cols-3 gap-2">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-3 shadow-xs text-center">
+          <span class="text-lg">🍹</span>
+          <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Lazer</span>
+          <span id="subtotalLazer" class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5 block">R$ 0,00</span>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-3 shadow-xs text-center">
+          <span class="text-lg">🚗</span>
+          <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Uber & Ifood</span>
+          <span id="subtotalUber" class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5 block">R$ 0,00</span>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-3 shadow-xs text-center">
+          <span class="text-lg">🛍️</span>
+          <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Extras</span>
+          <span id="subtotalExtras" class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5 block">R$ 0,00</span>
+        </div>
+      </div>
+
+      <!-- EXPENSE HISTORY SECTION -->
+      <div class="space-y-2.5">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center space-x-2">
+            <h2 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Lançamentos Recentes</h2>
+            <span id="txCountBadge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
+          </div>
+
+          <select id="txFilterSelect" class="text-[11px] font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1 text-slate-600 dark:text-slate-300 focus:outline-none">
+            <option value="all">Todas</option>
+            <option value="lazer">Lazer</option>
+            <option value="uber_ifood">Uber & Ifood</option>
+            <option value="extras_dia">Extras do dia a dia</option>
+          </select>
+        </div>
+
+        <div id="txListContainer" class="space-y-2">
+          <!-- Injected via JS -->
+        </div>
+
+        <div id="emptyState" class="hidden text-center py-9 px-4 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+            ✨
+          </div>
+          <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Nenhum gasto lançado este mês</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Use o botão verde abaixo para lançar saídas, Uber ou extras.</p>
+        </div>
+      </div>
+
+      <div class="text-center pt-2">
+        <button id="clearMonthExpensesBtn" class="text-[11px] text-slate-400 hover:text-rose-500 transition font-medium">
+          Zerar lançamentos deste mês
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- ABA 2: FIXOS & CAIXINHAS (EDITÁVEIS)       -->
+    <!-- ========================================== -->
+    <section id="viewFixos" class="hidden space-y-4">
+      
+      <div class="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-3.5 flex items-start space-x-2.5 text-xs text-emerald-900 dark:text-emerald-200">
+        <span class="text-base">💡</span>
+        <div class="leading-relaxed">
+          <p>Todos os valores são 100% editáveis mês a mês. Se em <strong>janeiro você pausar a academia (R$ 0)</strong> ou economizar na luz, pode transferir a folga diretamente para o <strong>Bolso Livre</strong> abaixo!</p>
+        </div>
+      </div>
+
+      <!-- GRUPO 1: FIXO (ESSENCIAL) -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-100">Fixo (Essencial)</h3>
+              <p class="text-[10px] text-slate-400">Planejado vs. Pago Real</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-black text-rose-500 block" id="totalFixoEssencialLabel">R$ 2.870,00</span>
+            <span class="text-[9px] font-bold text-slate-400" id="subtotalEssencialPlanLabel">Plan: R$ 2.870,00</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs" id="groupEssencialInputs">
+          <!-- Inputs populated via JS -->
+        </div>
+      </div>
+
+      <!-- GRUPO 2: FIXO (EXTRAS) -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-100">Fixo (Extras)</h3>
+              <p class="text-[10px] text-slate-400">Planejado vs. Pago Real</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-black text-indigo-500 block" id="totalFixoExtrasLabel">R$ 400,00</span>
+            <span class="text-[9px] font-bold text-slate-400" id="subtotalExtrasPlanLabel">Plan: R$ 400,00</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs" id="groupExtrasInputs">
+          <!-- Inputs populated via JS -->
+        </div>
+      </div>
+
+      <!-- GRUPO 3: CAIXINHAS & RESERVA -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-100">Caixinhas & Reserva</h3>
+              <p class="text-[10px] text-slate-400">Planejado vs. Pago / Aportado</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-black text-amber-500 block" id="totalCaixinhasLabel">R$ 1.300,00</span>
+            <span class="text-[9px] font-bold text-slate-400" id="subtotalCaixinhasPlanLabel">Plan: R$ 1.300,00</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs" id="groupCaixinhasInputs">
+          <!-- Inputs populated via JS -->
+        </div>
+      </div>
+
+      <!-- GRUPO 4: ESTILO DE VIDA (BOLSO LIVRE) - INTEGRADO DIRETAMENTE NA PLANILHA -->
+      <div class="bg-white dark:bg-slate-900 border-2 border-emerald-500/40 dark:border-emerald-500/30 rounded-3xl p-4 shadow-sm space-y-3 relative overflow-hidden">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-900 dark:text-white">Estilo de Vida</h3>
+              <p class="text-[10px] text-slate-400">Planejado vs. Pago / Real (Automático)</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-black text-emerald-600 dark:text-emerald-400 block" id="planSheetFlexPaidLabel">R$ 0,00</span>
+            <span class="text-[9px] font-bold text-slate-400" id="planSheetFlexGoalLabel">Plan: R$ 1.000,00</span>
+          </div>
+        </div>
+
+        <div class="py-1 space-y-2">
+          <div class="py-2 border-b border-slate-100 dark:border-slate-800/60">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-slate-800 dark:text-slate-200 font-bold text-xs truncate pr-2">🎯 Bolso Livre (Lazer, Uber & Extras)</span>
+              <span id="flexDiffBadge" class="text-[10px] font-bold text-emerald-500"></span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <span class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">Planejado</span>
+                <div class="relative">
+                  <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">R$</span>
+                  <input type="number" id="sheetFlexGoalInput" step="50" class="w-full text-right pl-6 pr-2 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-300 text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none" title="Planejado do Bolso Livre">
+                </div>
+              </div>
+              <div>
+                <span class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">Pago / Real (Automático)</span>
+                <div class="relative">
+                  <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-emerald-500 font-bold">R$</span>
+                  <input type="text" id="sheetFlexPaidInput" readonly class="w-full text-right pl-6 pr-2 py-1.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 font-black text-emerald-700 dark:text-emerald-300 text-xs cursor-not-allowed select-none" title="Gasto real acumulado automaticamente das entradas na aba Bolso">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action helper button to route surplus to Bolso Livre -->
+          <div id="quickReallocateBox" class="mt-3 p-2.5 bg-slate-50 dark:bg-slate-850 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">
+              Folga restante do salário: <strong id="quickSurplusVal" class="text-slate-800 dark:text-slate-200 font-black">R$ 30,00</strong>
+            </div>
+            <button id="applySurplusToFlexBtn" class="px-2.5 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-[10px] font-extrabold transition shadow-xs">
+              + Somar ao Bolso Livre
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-1 flex flex-col items-center gap-2">
+        <button id="resetDefaultsBtn" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-semibold underline underline-offset-4">
+          Restaurar valores padrão da planilha
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- ABA 3: BALANÇO GERAL DO MÊS               -->
+    <!-- ========================================== -->
+    <section id="viewBalanco" class="hidden space-y-4">
+      
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-xs space-y-4">
+        
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Balanço Consolidado</h3>
+            <p class="text-[11px] text-slate-400">Visão do mês atual</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            Tempo Real
+          </span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="flex justify-between items-center text-slate-700 dark:text-slate-300">
+            <span class="font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Salário Líquido
+            </span>
+            <span class="font-extrabold text-emerald-600 dark:text-emerald-400" id="balSalaryReal">R$ 5.600,00</span>
+          </div>
+
+          <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span> Fixo (Essencial)
+            </span>
+            <span class="font-semibold text-rose-500" id="balEssencialReal">- R$ 2.870,00</span>
+          </div>
+
+          <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Fixo (Extras)
+            </span>
+            <span class="font-semibold text-indigo-500" id="balExtrasReal">- R$ 400,00</span>
+          </div>
+
+          <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Caixinhas & Reserva (Aportes)
+            </span>
+            <span class="font-semibold text-amber-500" id="balCaixinhasReal">- R$ 1.300,00</span>
+          </div>
+
+          <div class="flex justify-between items-center text-slate-600 dark:text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Gasto no Bolso Livre (Real)
+            </span>
+            <span class="font-bold text-slate-900 dark:text-slate-100" id="balFlexReal">- R$ 0,00</span>
+          </div>
+        </div>
+
+        <!-- Result Box Comparing Surplus -->
+        <div class="mt-4 pt-4 border-t-2 border-dashed border-slate-100 dark:border-slate-800 rounded-2xl bg-slate-50 dark:bg-slate-850 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500 font-semibold">Teto Máximo Planejado para o Bolso:</span>
+            <strong id="balPlanFlexTarget" class="font-bold text-slate-700 dark:text-slate-200">R$ 1.000,00</strong>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
+            <div>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Sobra Real Atual em Conta</span>
+              <p class="text-[11px] text-slate-500">Salário menos fixos, caixinhas e gasto real</p>
+            </div>
+            <div class="text-right">
+              <span id="balProjectedNet" class="text-xl font-black text-emerald-600 dark:text-emerald-400 block">R$ 0,00</span>
+              <span id="balProjectedStatus" class="text-[10px] font-bold text-emerald-500">No azul</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Close Month CTA Button -->
+        <div class="pt-2">
+          <button id="openCloseMonthModalBtn" class="w-full py-3 px-4 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white font-extrabold text-xs hover:bg-slate-800 dark:hover:bg-slate-700 transition flex items-center justify-center space-x-2 shadow-sm">
+            <span>🔒 Fechar e Arquivar Este Mês</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quick Analysis Card -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs text-xs space-y-2">
+        <h4 class="font-extrabold text-slate-800 dark:text-slate-200">🔍 Como ler seu balanço</h4>
+        <p class="text-slate-500 dark:text-slate-400 leading-relaxed">
+          Se o <strong>Bolso Livre</strong> for gasto até o teto planejado (R$ <span class="cfgGoalRef">1.000</span>), você fecha o mês com todos os fixos pagos e <strong>R$ <span id="patrimonyAccumulatedRef">1.300,00</span></strong> guardados em previdência, reserva e saúde!
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- ABA 4: HISTÓRICO & BACKUP DOS MESES        -->
+    <!-- ========================================== -->
+    <section id="viewHistorico" class="hidden space-y-4">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Histórico de Meses Anteriores</h3>
+            <p class="text-[10px] text-slate-400">Meses fechados e arquivados no seu telemóvel</p>
+          </div>
+          <span id="historyCountBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0 meses</span>
+        </div>
+
+        <div id="historyListContainer" class="mt-3 space-y-3">
+          <!-- Injected via JS -->
+        </div>
+
+        <div id="historyEmptyState" class="text-center py-8 px-4">
+          <div class="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-2 text-lg">
+            📂
+          </div>
+          <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Nenhum mês arquivado ainda</p>
+          <p class="text-[11px] text-slate-400 mt-0.5 max-w-xs mx-auto">Ao final de cada mês, use a opção "Fechar e Arquivar Este Mês" na aba Balanço.</p>
+        </div>
+      </div>
+
+      <!-- Backup & Restore Box -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 shadow-xs space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">💾 Cópia de Segurança & Exportação Excel</h4>
+        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+          Gere um arquivo Excel completo com <strong>De x Para (Planejado x Gasto Real)</strong>, saldo por categoria, histórico dos meses arquivados e lista detalhada de despesas.
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button id="exportCsvBtn" class="py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Exportar Excel (De x Para)</span>
+          </button>
+          <button id="exportBackupBtn" class="py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs transition flex items-center justify-center space-x-1.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Backup Total (.json)</span>
+          </button>
+        </div>
+
+        <div class="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <label class="cursor-pointer text-[11px] text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+            <span>Restaurar de arquivo (.json)</span>
+            <input type="file" id="importBackupInput" accept=".json" class="hidden">
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING QUICK ADD BUTTON (BOLSO LIVRE) -->
+  <div id="quickAddBar" class="fixed bottom-4 left-0 right-0 max-w-md mx-auto px-4 z-20 pointer-events-none">
+    <button id="openNewExpenseBtn" class="pointer-events-auto w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 active:scale-[0.98] transition-all text-white font-extrabold text-sm shadow-xl shadow-emerald-500/25 flex items-center justify-center space-x-2">
+      <svg class="w-5 h-5 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      <span>+ Lançar no Bolso Livre</span>
+    </button>
+  </div>
+
+  <!-- MODAL 1: NOVO GASTO NO BOLSO LIVRE -->
+  <div id="expenseModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex-col justify-end sm:justify-center sm:items-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl border-t sm:border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">💸</span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Lançar no Bolso Livre</h3>
+            <p class="text-[10px] text-slate-400">Deduz do seu teto de R$ <span class="cfgGoalRef">1.000</span></p>
+          </div>
+        </div>
+        <button id="closeExpenseModalBtn" class="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="newExpenseForm" class="mt-4 space-y-3.5">
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Valor do Gasto</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-extrabold text-lg">R$</span>
+            <input type="number" step="0.01" min="0.01" id="inputAmount" required placeholder="0,00" class="w-full pl-11 pr-3 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-black text-2xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Descrição</label>
+          <input type="text" id="inputDesc" required placeholder="Ex: Aniversário sábado, Corrida de chuva, Farmácia..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <!-- Subcategorias do Estilo de Vida da sua planilha -->
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Categoria (Planilha)</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <label class="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 dark:has-[:checked]:bg-emerald-950/40 text-center transition">
+              <input type="radio" name="inputSubcat" value="lazer" checked class="sr-only">
+              <span class="text-base">🍹</span>
+              <span class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200 mt-0.5">Lazer</span>
+            </label>
+            <label class="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 dark:has-[:checked]:bg-emerald-950/40 text-center transition">
+              <input type="radio" name="inputSubcat" value="uber_ifood" class="sr-only">
+              <span class="text-base">🚗</span>
+              <span class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200 mt-0.5">Uber / Ifood</span>
+            </label>
+            <label class="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 dark:has-[:checked]:bg-emerald-950/40 text-center transition">
+              <input type="radio" name="inputSubcat" value="extras_dia" class="sr-only">
+              <span class="text-base">🛍️</span>
+              <span class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200 mt-0.5">Extras</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Forma</label>
+            <select id="inputPaymentMethod" class="w-full px-2.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <option value="Crédito">Cartão de Crédito</option>
+              <option value="Pix / Débito">Pix / Débito</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Data</label>
+            <input type="date" id="inputDate" class="w-full px-2.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full mt-2 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white font-black text-sm shadow-md shadow-emerald-500/25 transition flex items-center justify-center space-x-1.5">
+          <span>Salvar Lançamento</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: AJUSTAR SALÁRIO E TETO DO BOLSO LIVRE -->
+  <div id="salaryModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex-col justify-end sm:justify-center sm:items-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl border-t sm:border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">⚙️</span>
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Ajustar Salário & Bolso Livre</h3>
+        </div>
+        <button id="closeSalaryModalBtn" class="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="salaryForm" class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-black text-slate-600 dark:text-slate-300 mb-1">Salário Líquido Mensal (R$)</label>
+          <input type="number" id="inputSalaryVal" step="50" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-extrabold text-sm text-slate-800 dark:text-slate-100">
+          <p class="text-[10px] text-slate-400 mt-1">Valor base que cai na sua conta.</p>
+        </div>
+
+        <div>
+          <label class="block font-black text-slate-600 dark:text-slate-300 mb-1">🎯 Teto do Bolso Livre (R$)</label>
+          <input type="number" id="inputFlexGoalVal" step="50" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-extrabold text-sm text-emerald-600 dark:text-emerald-400">
+          <p class="text-[10px] text-slate-400 mt-1">O valor flexibilizado para Lazer, Uber, Ifood e Extras (seu padrão: R$ 1.000,00).</p>
+        </div>
+
+        <button type="submit" class="w-full mt-2 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs shadow-md transition">
+          Salvar Alterações
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: CONFIRMAR FECHAMENTO DE MÊS -->
+  <div id="closeMonthModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex-col justify-end sm:justify-center sm:items-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl border-t sm:border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom duration-200 space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">🔒</span>
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Fechar Mês Atual</h3>
+        </div>
+        <button id="cancelCloseMonthBtn" class="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Você está prestes a fechar o mês de <strong id="closeMonthNameTarget" class="text-slate-900 dark:text-white font-black">Novembro / 2026</strong>. 
+        Um snapshot com todos os fixos, aportes e despesas do Bolso Livre será guardado no seu <strong>Histórico</strong>, e o Bolso Livre será reiniciado com R$ 0 gastos para o novo mês.
+      </p>
+
+      <div class="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-3.5 space-y-1.5 text-xs">
+        <div class="flex justify-between">
+          <span class="text-slate-500">Gasto no Bolso Livre:</span>
+          <strong id="closeMonthFlexSpent" class="text-slate-800 dark:text-slate-200">R$ 0,00</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Guardado nas Caixinhas:</span>
+          <strong id="closeMonthCaixinhas" class="text-amber-500">R$ 1.300,00</strong>
+        </div>
+        <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-1 font-bold">
+          <span class="text-slate-600 dark:text-slate-300">Sobra Final em Conta:</span>
+          <strong id="closeMonthNetRemain" class="text-emerald-500">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button id="cancelCloseMonthBtn2" class="py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-extrabold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          Cancelar
+        </button>
+        <button id="confirmCloseMonthBtn" class="py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs shadow-md transition">
+          Confirmar Fechamento
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION CORE -->
+  <script>
+    // 1. DEFAULT DATASETS (EXACT SHEET STRUCTURE)
+    const DEFAULT_DATA = {
+      salary: 5600.00,
+      flexBudgetGoal: 1000.00,
+      
+      // Fixo (Essencial) com Planejado e Pago separados
+      essencial: [
+        { id: 'aluguel', label: 'Aluguel + Condomínio', planned: 2300.00, paid: 2300.00 },
+        { id: 'agua_luz', label: 'Água + Energia', planned: 250.00, paid: 250.00 },
+        { id: 'celular', label: 'Plano de Celular', planned: 60.00, paid: 60.00 },
+        { id: 'onibus', label: 'Ônibus', planned: 160.00, paid: 160.00 },
+        { id: 'internet', label: 'Internet', planned: 100.00, paid: 100.00 }
+      ],
+
+      // Fixo (Extras) com Planejado e Pago separados
+      extras: [
+        { id: 'sesi', label: 'SESI FIT', planned: 100.00, paid: 100.00 },
+        { id: 'ingles', label: 'Inglês', planned: 160.00, paid: 160.00 },
+        { id: 'streams', label: 'Streamings e Assinaturas', planned: 140.00, paid: 140.00 }
+      ],
+
+      // Caixinhas & Reserva com Planejado e Pago separados
+      caixinhas: [
+        { id: 'viagem', label: 'Fundo Viagem', planned: 300.00, paid: 300.00 },
+        { id: 'mapeamento', label: 'Mapeamento Corporal', planned: 120.00, paid: 120.00 },
+        { id: 'saude', label: 'Fundo Saúde (coparticipação)', planned: 130.00, paid: 130.00 },
+        { id: 'reserva', label: 'Reserva de Emergência', planned: 350.00, paid: 350.00 },
+        { id: 'previsc', label: 'Previsc (Previdência Privada)', planned: 400.00, paid: 400.00 }
+      ]
+    };
+
+    // LOCAL STORAGE KEYS
+    const STORAGE_KEY_DATA = 'meubolso_data_v7';
+    const STORAGE_KEY_EXPENSES = 'meubolso_expenses_v7';
+    const STORAGE_KEY_HISTORY = 'meubolso_history_v7';
+    const STORAGE_KEY_THEME = 'meubolso_theme_v5';
+
+    // 2. STATE MANAGEMENT
+    let appData = loadAppData();
+    let expenses = loadExpenses();
+    let monthHistory = loadHistory();
+
+    function normalizeDualItem(item, defaultItem) {
+      const planned = item.planned !== undefined ? Number(item.planned) : (Number(item.value) || defaultItem.planned || 0);
+      const paid = item.paid !== undefined ? Number(item.paid) : planned;
+      return {
+        id: item.id || defaultItem.id,
+        label: item.label || defaultItem.label,
+        planned,
+        paid
+      };
+    }
+
+    function loadAppData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_DATA) || localStorage.getItem('meubolso_data_v6');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return {
+            salary: Number(parsed.salary) || DEFAULT_DATA.salary,
+            flexBudgetGoal: Number(parsed.flexBudgetGoal) || DEFAULT_DATA.flexBudgetGoal,
+            essencial: (parsed.essencial || DEFAULT_DATA.essencial).map((item, i) => normalizeDualItem(item, DEFAULT_DATA.essencial[i] || item)),
+            extras: (parsed.extras || DEFAULT_DATA.extras).map((item, i) => normalizeDualItem(item, DEFAULT_DATA.extras[i] || item)),
+            caixinhas: (parsed.caixinhas || DEFAULT_DATA.caixinhas).map((item, i) => normalizeDualItem(item, DEFAULT_DATA.caixinhas[i] || item))
+          };
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    function saveAppData() {
+      localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(appData));
+      renderAll();
+    }
+
+    function loadExpenses() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_EXPENSES) || localStorage.getItem('meubolso_expenses_v6');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+      
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+
+      return [
+        {
+          id: 'tx_init_1',
+          desc: 'Aniversário sábado',
+          amount: 180.00,
+          category: 'lazer',
+          paymentMethod: 'Crédito',
+          date: `${yyyy}-${mm}-02`
+        },
+        {
+          id: 'tx_init_2',
+          desc: 'Presente de aniversário',
+          amount: 145.00,
+          category: 'extras_dia',
+          paymentMethod: 'Crédito',
+          date: `${yyyy}-${mm}-02`
+        }
+      ];
+    }
+
+    function saveExpenses() {
+      localStorage.setItem(STORAGE_KEY_EXPENSES, JSON.stringify(expenses));
+      renderAll();
+    }
+
+    function loadHistory() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_HISTORY) || localStorage.getItem('meubolso_history_v6');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+      return [];
+    }
+
+    function saveHistory() {
+      localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(monthHistory));
+      renderHistory();
+    }
+
+    // 3. HELPERS
+    function formatBRL(val) {
+      return (Number(val) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function getDaysRemaining() {
+      const now = new Date();
+      const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      return Math.max(1, end.getDate() - now.getDate() + 1);
+    }
+
+    function getWeekendsRemaining() {
+      const now = new Date();
+      const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      let count = 0;
+      let cur = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      while (cur <= end) {
+        if (cur.getDay() === 6) count++;
+        cur.setDate(cur.getDate() + 1);
+      }
+      return Math.max(1, count);
+    }
+
+    // 4. RENDERING FUNCTIONS
+    function renderAll() {
+      renderMonthHeader();
+      renderBolsoLivre();
+      renderFixosInputs();
+      renderBalanco();
+      renderHistory();
+    }
+
+    function renderMonthHeader() {
+      const now = new Date();
+      const str = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+      document.getElementById('currentMonthYear').textContent = str.charAt(0).toUpperCase() + str.slice(1);
+      document.getElementById('topSalaryVal').textContent = formatBRL(appData.salary);
+      document.querySelectorAll('.cfgGoalRef').forEach(el => el.textContent = formatBRL(appData.flexBudgetGoal));
+    }
+
+    function renderBolsoLivre() {
+      const goal = Number(appData.flexBudgetGoal) || 1000;
+      const spent = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const remaining = goal - spent;
+      const percent = Math.min(100, Math.max(0, (spent / goal) * 100));
+
+      document.getElementById('displayBudgetGoal').textContent = formatBRL(goal);
+      
+      const remainEl = document.getElementById('heroRemainingAmount');
+      const remainSignEl = document.getElementById('heroRemainSign');
+      remainEl.textContent = formatBRL(Math.abs(remaining));
+
+      const spentEl = document.getElementById('heroSpentAmount');
+      spentEl.textContent = `R$ ${formatBRL(spent)}`;
+
+      const progressBar = document.getElementById('heroProgressBar');
+      const percentText = document.getElementById('heroPercentText');
+      const heroGlow = document.getElementById('heroGlow');
+
+      progressBar.style.width = `${Math.min(100, (spent / goal) * 100)}%`;
+
+      if (remaining < 0) {
+        remainSignEl.textContent = '- R$';
+        remainSignEl.parentElement.classList.add('text-rose-400');
+        percentText.textContent = `Estourou em R$ ${formatBRL(Math.abs(remaining))}`;
+        percentText.className = 'font-bold text-rose-400';
+        progressBar.className = 'h-full rounded-full bg-rose-500 transition-all duration-500';
+        heroGlow.className = 'absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-rose-500/25 blur-2xl pointer-events-none transition-all duration-500';
+      } else if (percent >= 80) {
+        remainSignEl.textContent = 'R$';
+        remainSignEl.parentElement.classList.remove('text-rose-400');
+        percentText.textContent = `${Math.round(percent)}% usado (Atenção)`;
+        percentText.className = 'font-bold text-amber-400';
+        progressBar.className = 'h-full rounded-full bg-amber-400 transition-all duration-500';
+        heroGlow.className = 'absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-amber-500/25 blur-2xl pointer-events-none transition-all duration-500';
+      } else {
+        remainSignEl.textContent = 'R$';
+        remainSignEl.parentElement.classList.remove('text-rose-400');
+        percentText.textContent = `${Math.round(percent)}% usado`;
+        percentText.className = 'font-bold text-emerald-400';
+        progressBar.className = 'h-full rounded-full bg-emerald-400 transition-all duration-500';
+        heroGlow.className = 'absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/20 blur-2xl pointer-events-none transition-all duration-500';
+      }
+
+      // Pacing calculations
+      const daysLeft = getDaysRemaining();
+      document.getElementById('daysRemainingText').textContent = `${daysLeft} dias restantes no mês`;
+      const dailyAllow = remaining > 0 ? (remaining / daysLeft) : 0;
+      document.getElementById('paceDailyAmount').textContent = `R$ ${formatBRL(dailyAllow)} / dia`;
+
+      const weekendsLeft = getWeekendsRemaining();
+      document.getElementById('weekendsRemainingText').textContent = `${weekendsLeft} fins de semana restantes`;
+      const weeklyAllow = remaining > 0 ? (remaining / weekendsLeft) : 0;
+      document.getElementById('paceWeeklyAmount').textContent = `R$ ${formatBRL(weeklyAllow)} / fds`;
+
+      // Subtotals
+      const totalLazer = expenses.filter(t => t.category === 'lazer').reduce((a, b) => a + Number(b.amount), 0);
+      const totalUber = expenses.filter(t => t.category === 'uber_ifood').reduce((a, b) => a + Number(b.amount), 0);
+      const totalExtras = expenses.filter(t => t.category === 'extras_dia').reduce((a, b) => a + Number(b.amount), 0);
+
+      document.getElementById('subtotalLazer').textContent = `R$ ${formatBRL(totalLazer)}`;
+      document.getElementById('subtotalUber').textContent = `R$ ${formatBRL(totalUber)}`;
+      document.getElementById('subtotalExtras').textContent = `R$ ${formatBRL(totalExtras)}`;
+
+      renderExpenseList();
+    }
+
+    function getSubcatMeta(sub) {
+      switch(sub) {
+        case 'lazer':
+          return { icon: '🍹', label: 'Lazer', badge: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' };
+        case 'uber_ifood':
+          return { icon: '🚗', label: 'Uber & Ifood', badge: 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300 border-teal-200 dark:border-teal-800' };
+        case 'extras_dia':
+        default:
+          return { icon: '🛍️', label: 'Extras', badge: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
+      }
+    }
+
+    function renderExpenseList() {
+      const container = document.getElementById('txListContainer');
+      const emptyState = document.getElementById('emptyState');
+      const filter = document.getElementById('txFilterSelect').value;
+
+      const filtered = filter === 'all' 
+        ? expenses 
+        : expenses.filter(e => e.category === filter);
+
+      document.getElementById('txCountBadge').textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = filtered.map(t => {
+        const meta = getSubcatMeta(t.category);
+        return `
+          <div class="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-3 flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-base flex-shrink-0">
+                ${meta.icon}
+              </div>
+              <div class="min-w-0">
+                <span class="font-extrabold text-xs text-slate-800 dark:text-slate-100 block truncate">${t.desc}</span>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md border ${meta.badge}">${meta.label}</span>
+                  <span class="text-[10px] text-slate-400 font-medium">${t.date || ''} • ${t.paymentMethod || 'Crédito'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 pl-2">
+              <span class="font-black text-xs text-slate-900 dark:text-white">R$ ${formatBRL(t.amount)}</span>
+              <button onclick="deleteExpense('${t.id}')" title="Excluir lançamento" class="p-1 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-800 transition">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.deleteExpense = function(id) {
+      expenses = expenses.filter(t => t.id !== id);
+      saveExpenses();
+    };
+
+    window.deleteArchivedMonth = function(idx) {
+      monthHistory.splice(idx, 1);
+      saveHistory();
+    };
+
+    // 5. RENDER DUAL-INPUT ROWS FOR ESSENCIAL, EXTRAS & CAIXINHAS (PLANEJADO X PAGO)
+    function renderDualRowHtml(group, item) {
+      const diff = Number(item.planned || 0) - Number(item.paid || 0);
+      let diffBadge = '';
+      if (diff > 0) {
+        diffBadge = `<span class="text-[10px] font-bold text-emerald-500">(- R$ ${formatBRL(diff)})</span>`;
+      } else if (diff < 0) {
+        diffBadge = `<span class="text-[10px] font-bold text-rose-500">(+ R$ ${formatBRL(Math.abs(diff))})</span>`;
+      }
+
+      const inputTitle = group === 'caixinhas' ? 'Aporte real realizado' : 'Valor real pago';
+
+      return `
+        <div class="py-2 border-b border-slate-100 dark:border-slate-800/60">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-slate-800 dark:text-slate-200 font-bold text-xs truncate pr-2">${item.label}</span>
+            ${diffBadge}
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <span class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">Planejado</span>
+              <div class="relative">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">R$</span>
+                <input type="number" step="5" value="${item.planned}" 
+                  onchange="updateDualValue('${group}', '${item.id}', 'planned', this.value)" 
+                  class="w-full text-right pl-6 pr-2 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-300 text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none" 
+                  title="Planejado para ${item.label}">
+              </div>
+            </div>
+            <div>
+              <span class="block text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-0.5">Pago / Real</span>
+              <div class="relative">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">R$</span>
+                <input type="number" step="5" value="${item.paid}" 
+                  onchange="updateDualValue('${group}', '${item.id}', 'paid', this.value)" 
+                  class="w-full text-right pl-6 pr-2 py-1.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 font-black text-slate-900 dark:text-white text-xs focus:ring-1 focus:ring-emerald-500 focus:outline-none" 
+                  title="${inputTitle}">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFixosInputs() {
+      // 1. Essencial
+      const sumEssencialPlanned = appData.essencial.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      document.getElementById('totalFixoEssencialLabel').textContent = `Pago: R$ ${formatBRL(sumEssencialPaid)}`;
+      document.getElementById('subtotalEssencialPlanLabel').textContent = `Plan: R$ ${formatBRL(sumEssencialPlanned)}`;
+      document.getElementById('groupEssencialInputs').innerHTML = appData.essencial.map(item => renderDualRowHtml('essencial', item)).join('');
+
+      // 2. Extras
+      const sumExtrasPlanned = appData.extras.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      document.getElementById('totalFixoExtrasLabel').textContent = `Pago: R$ ${formatBRL(sumExtrasPaid)}`;
+      document.getElementById('subtotalExtrasPlanLabel').textContent = `Plan: R$ ${formatBRL(sumExtrasPlanned)}`;
+      document.getElementById('groupExtrasInputs').innerHTML = appData.extras.map(item => renderDualRowHtml('extras', item)).join('');
+
+      // 3. Caixinhas (agora com Planejado e Pago/Aportado)
+      const sumCaixinhasPlanned = appData.caixinhas.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      document.getElementById('totalCaixinhasLabel').textContent = `Pago: R$ ${formatBRL(sumCaixinhasPaid)}`;
+      document.getElementById('subtotalCaixinhasPlanLabel').textContent = `Plan: R$ ${formatBRL(sumCaixinhasPlanned)}`;
+      document.getElementById('patrimonyAccumulatedRef').textContent = formatBRL(sumCaixinhasPaid);
+      document.getElementById('groupCaixinhasInputs').innerHTML = appData.caixinhas.map(item => renderDualRowHtml('caixinhas', item)).join('');
+
+      // 4. Bolso Livre (Estilo de Vida): Planejado vs. Pago / Real Automático
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const flexGoalInput = document.getElementById('sheetFlexGoalInput');
+      if (document.activeElement !== flexGoalInput) {
+        flexGoalInput.value = appData.flexBudgetGoal;
+      }
+      document.getElementById('planSheetFlexGoalLabel').textContent = `Plan: R$ ${formatBRL(appData.flexBudgetGoal)}`;
+      document.getElementById('planSheetFlexPaidLabel').textContent = `Pago: R$ ${formatBRL(spentFlex)}`;
+      document.getElementById('sheetFlexPaidInput').value = formatBRL(spentFlex);
+
+      const flexDiff = Number(appData.flexBudgetGoal) - spentFlex;
+      const flexDiffBadge = document.getElementById('flexDiffBadge');
+      if (flexDiff > 0) {
+        flexDiffBadge.textContent = `(Sobra de R$ ${formatBRL(flexDiff)})`;
+        flexDiffBadge.className = 'text-[10px] font-bold text-emerald-500';
+      } else if (flexDiff < 0) {
+        flexDiffBadge.textContent = `(Estourado em R$ ${formatBRL(Math.abs(flexDiff))})`;
+        flexDiffBadge.className = 'text-[10px] font-bold text-rose-500';
+      } else {
+        flexDiffBadge.textContent = `(No limite exato)`;
+        flexDiffBadge.className = 'text-[10px] font-bold text-slate-400';
+      }
+
+      // Totais planejados e folga de remanejamento (baseado no que foi planejado vs pago real)
+      const totalPlanned = sumEssencialPlanned + sumExtrasPlanned + sumCaixinhasPlanned + Number(appData.flexBudgetGoal);
+      const planTotalBadge = document.getElementById('planTotalHeaderBadge');
+      if (planTotalBadge) {
+        planTotalBadge.textContent = `Plan: R$ ${formatBRL(totalPlanned)}`;
+      }
+      
+      const totalPaidReal = sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex;
+      const surplus = appData.salary - totalPaidReal;
+      const surplusEl = document.getElementById('quickSurplusVal');
+      const marginBadge = document.getElementById('planMarginBadge');
+      const applyBtn = document.getElementById('applySurplusToFlexBtn');
+
+      if (surplus >= 0) {
+        surplusEl.textContent = `R$ ${formatBRL(surplus)}`;
+        surplusEl.className = 'text-emerald-600 dark:text-emerald-400 font-black';
+        if (marginBadge) {
+          marginBadge.textContent = `(Sobra de R$ ${formatBRL(surplus)} no salário)`;
+          marginBadge.className = 'text-[10px] text-emerald-600 dark:text-emerald-400 font-bold';
+        }
+        applyBtn.classList.remove('opacity-50', 'pointer-events-none');
+        applyBtn.textContent = `+ Somar R$ ${formatBRL(surplus)} ao Bolso`;
+      } else {
+        surplusEl.textContent = `- R$ ${formatBRL(Math.abs(surplus))}`;
+        surplusEl.className = 'text-rose-500 font-black';
+        if (marginBadge) {
+          marginBadge.textContent = `(Déficit de R$ ${formatBRL(Math.abs(surplus))})`;
+          marginBadge.className = 'text-[10px] text-rose-500 font-bold';
+        }
+        applyBtn.classList.add('opacity-50', 'pointer-events-none');
+        applyBtn.textContent = 'Orçamento estourado';
+      }
+    }
+
+    // Atualização de campos duplos (planned vs paid)
+    window.updateDualValue = function(group, id, field, newVal) {
+      const val = parseFloat(newVal) || 0;
+      const item = appData[group].find(i => i.id === id);
+      if (item) {
+        item[field] = val;
+        saveAppData();
+      }
+    };
+
+    // Listener para o input do Planejado do Bolso Livre diretamente na planilha
+    document.getElementById('sheetFlexGoalInput').addEventListener('change', function(e) {
+      const val = parseFloat(e.target.value) || 0;
+      appData.flexBudgetGoal = val;
+      saveAppData();
+    });
+
+    // Ação rápida: transferir a sobra/economia real de fixos diretamente para o Bolso Livre
+    document.getElementById('applySurplusToFlexBtn').addEventListener('click', function() {
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const surplus = appData.salary - (sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex);
+
+      if (surplus > 0) {
+        appData.flexBudgetGoal = Number(appData.flexBudgetGoal) + surplus;
+        saveAppData();
+      }
+    });
+
+    // 6. RENDER BALANÇO DO MÊS (UTILIZA OS VALORES PAGOS REAIS)
+    function renderBalanco() {
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+
+      document.getElementById('balSalaryReal').textContent = `R$ ${formatBRL(appData.salary)}`;
+      document.getElementById('balEssencialReal').textContent = `- R$ ${formatBRL(sumEssencialPaid)}`;
+      document.getElementById('balExtrasReal').textContent = `- R$ ${formatBRL(sumExtrasPaid)}`;
+      document.getElementById('balCaixinhasReal').textContent = `- R$ ${formatBRL(sumCaixinhasPaid)}`;
+      document.getElementById('balFlexReal').textContent = `- R$ ${formatBRL(spentFlex)}`;
+      document.getElementById('balPlanFlexTarget').textContent = `R$ ${formatBRL(appData.flexBudgetGoal)}`;
+
+      const totalActualExpenses = sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex;
+      const actualSurplus = appData.salary - totalActualExpenses;
+
+      const netEl = document.getElementById('balProjectedNet');
+      const statusEl = document.getElementById('balProjectedStatus');
+
+      netEl.textContent = `R$ ${formatBRL(actualSurplus)}`;
+
+      if (actualSurplus < 0) {
+        netEl.className = 'text-xl font-black text-rose-500 block';
+        statusEl.textContent = 'Déficit (Atenção)';
+        statusEl.className = 'text-[10px] font-bold text-rose-500';
+      } else {
+        netEl.className = 'text-xl font-black text-emerald-600 dark:text-emerald-400 block';
+        statusEl.textContent = 'No azul com folga';
+        statusEl.className = 'text-[10px] font-bold text-emerald-500';
+      }
+    }
+
+    // 7. NAVIGATION LOGIC
+    const tabBtnBolso = document.getElementById('tabBtnBolso');
+    const tabBtnFixos = document.getElementById('tabBtnFixos');
+    const tabBtnBalanco = document.getElementById('tabBtnBalanco');
+    const tabBtnHistorico = document.getElementById('tabBtnHistorico');
+
+    const viewBolso = document.getElementById('viewBolso');
+    const viewFixos = document.getElementById('viewFixos');
+    const viewBalanco = document.getElementById('viewBalanco');
+    const viewHistorico = document.getElementById('viewHistorico');
+    const quickAddBar = document.getElementById('quickAddBar');
+
+    function switchTab(target) {
+      [tabBtnBolso, tabBtnFixos, tabBtnBalanco, tabBtnHistorico].forEach(btn => {
+        btn.classList.remove('active', 'bg-white', 'text-slate-900', 'dark:bg-slate-700', 'dark:text-white', 'shadow-xs');
+        btn.classList.add('text-slate-500', 'dark:text-slate-400');
+      });
+
+      [viewBolso, viewFixos, viewBalanco, viewHistorico].forEach(v => v.classList.add('hidden'));
+
+      if (target === 'bolso') {
+        tabBtnBolso.classList.add('active', 'bg-white', 'text-slate-900', 'dark:bg-slate-700', 'dark:text-white', 'shadow-xs');
+        viewBolso.classList.remove('hidden');
+        quickAddBar.classList.remove('hidden');
+      } else if (target === 'fixos') {
+        tabBtnFixos.classList.add('active', 'bg-white', 'text-slate-900', 'dark:bg-slate-700', 'dark:text-white', 'shadow-xs');
+        viewFixos.classList.remove('hidden');
+        quickAddBar.classList.add('hidden');
+      } else if (target === 'balanco') {
+        tabBtnBalanco.classList.add('active', 'bg-white', 'text-slate-900', 'dark:bg-slate-700', 'dark:text-white', 'shadow-xs');
+        viewBalanco.classList.remove('hidden');
+        quickAddBar.classList.add('hidden');
+      } else if (target === 'historico') {
+        tabBtnHistorico.classList.add('active', 'bg-white', 'text-slate-900', 'dark:bg-slate-700', 'dark:text-white', 'shadow-xs');
+        viewHistorico.classList.remove('hidden');
+        quickAddBar.classList.add('hidden');
+      }
+    }
+
+    tabBtnBolso.addEventListener('click', () => switchTab('bolso'));
+    tabBtnFixos.addEventListener('click', () => switchTab('fixos'));
+    tabBtnBalanco.addEventListener('click', () => switchTab('balanco'));
+    tabBtnHistorico.addEventListener('click', () => switchTab('historico'));
+
+    // 8. MONTH ARCHIVE & HISTORY LOGIC
+    function renderHistory() {
+      const container = document.getElementById('historyListContainer');
+      const emptyState = document.getElementById('historyEmptyState');
+      document.getElementById('historyCountBadge').textContent = `${monthHistory.length} meses`;
+
+      if (monthHistory.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = monthHistory.map((m, idx) => {
+        const netColor = m.netSurplus >= 0 ? 'text-emerald-500' : 'text-rose-500';
+        return `
+          <details class="group bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden text-xs transition">
+            <summary class="p-3.5 flex items-center justify-between cursor-pointer list-none select-none">
+              <div>
+                <span class="font-extrabold text-slate-800 dark:text-slate-100 block text-xs">${m.monthLabel}</span>
+                <span class="text-[10px] text-slate-400">Gasto Livre: R$ ${formatBRL(m.spentFlex)} • Caixinhas: R$ ${formatBRL(m.totalCaixinhas)}</span>
+              </div>
+              <div class="text-right flex items-center space-x-2">
+                <div>
+                  <span class="font-black text-xs ${netColor} block">R$ ${formatBRL(m.netSurplus)}</span>
+                  <span class="text-[9px] text-slate-400">${m.netSurplus >= 0 ? 'Sobra' : 'Déficit'}</span>
+                </div>
+                <svg class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </summary>
+            
+            <div class="px-3.5 pb-3.5 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 space-y-2 text-[11px]">
+              <div class="grid grid-cols-2 gap-2 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                <div>Salário: <strong class="text-slate-800 dark:text-slate-200">R$ ${formatBRL(m.salary)}</strong></div>
+                <div>Essencial: <strong class="text-rose-500">R$ ${formatBRL(m.totalEssencial)}</strong></div>
+                <div>Extras: <strong class="text-indigo-500">R$ ${formatBRL(m.totalExtras)}</strong></div>
+                <div>Caixinhas: <strong class="text-amber-500">R$ ${formatBRL(m.totalCaixinhas)}</strong></div>
+              </div>
+
+              <div>
+                <span class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Lançamentos do Bolso Livre (${m.expenses.length}):</span>
+                <div class="max-h-36 overflow-y-auto space-y-1 pr-1">
+                  ${m.expenses.map(e => `
+                    <div class="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800 text-[10px]">
+                      <span class="text-slate-600 dark:text-slate-400 truncate pr-2">${e.desc} (${e.date})</span>
+                      <strong class="text-slate-800 dark:text-slate-200 flex-shrink-0">R$ ${formatBRL(e.amount)}</strong>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="pt-1 flex justify-end">
+                <button onclick="deleteArchivedMonth(${idx})" class="text-[10px] text-rose-500 hover:underline">
+                  Excluir este histórico
+                </button>
+              </div>
+            </div>
+          </details>
+        `;
+      }).join('');
+    }
+
+    // Modal Fechar Mês
+    const openCloseMonthModalBtn = document.getElementById('openCloseMonthModalBtn');
+    const closeMonthModal = document.getElementById('closeMonthModal');
+    const confirmCloseMonthBtn = document.getElementById('confirmCloseMonthBtn');
+    const cancelCloseMonthBtn = document.getElementById('cancelCloseMonthBtn');
+    const cancelCloseMonthBtn2 = document.getElementById('cancelCloseMonthBtn2');
+
+    function closeMonthModalHide() {
+      closeMonthModal.classList.add('hidden');
+      closeMonthModal.classList.remove('flex');
+    }
+
+    cancelCloseMonthBtn.addEventListener('click', closeMonthModalHide);
+    cancelCloseMonthBtn2.addEventListener('click', closeMonthModalHide);
+    closeMonthModal.addEventListener('click', (e) => {
+      if (e.target === closeMonthModal) closeMonthModalHide();
+    });
+
+    openCloseMonthModalBtn.addEventListener('click', () => {
+      const now = new Date();
+      const monthLabel = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+      document.getElementById('closeMonthNameTarget').textContent = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
+
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const net = appData.salary - (sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex);
+
+      document.getElementById('closeMonthFlexSpent').textContent = `R$ ${formatBRL(spentFlex)}`;
+      document.getElementById('closeMonthCaixinhas').textContent = `R$ ${formatBRL(sumCaixinhasPaid)}`;
+      document.getElementById('closeMonthNetRemain').textContent = `R$ ${formatBRL(net)}`;
+
+      closeMonthModal.classList.remove('hidden');
+      closeMonthModal.classList.add('flex');
+    });
+
+    confirmCloseMonthBtn.addEventListener('click', () => {
+      const now = new Date();
+      const monthLabel = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const netSurplus = appData.salary - (sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex);
+
+      const snapshot = {
+        id: 'month_' + Date.now(),
+        dateClosed: new Date().toISOString(),
+        monthLabel: monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1),
+        salary: appData.salary,
+        flexBudgetGoal: appData.flexBudgetGoal,
+        totalEssencial: sumEssencialPaid,
+        totalExtras: sumExtrasPaid,
+        totalCaixinhas: sumCaixinhasPaid,
+        spentFlex: spentFlex,
+        netSurplus: netSurplus,
+        snapshotEssencial: JSON.parse(JSON.stringify(appData.essencial)),
+        snapshotExtras: JSON.parse(JSON.stringify(appData.extras)),
+        snapshotCaixinhas: JSON.parse(JSON.stringify(appData.caixinhas)),
+        expenses: [...expenses]
+      };
+
+      monthHistory.unshift(snapshot);
+      saveHistory();
+
+      // Zera apenas os gastos do Bolso Livre; mantém planejamento intacto
+      expenses = [];
+      saveExpenses();
+
+      closeMonthModalHide();
+      switchTab('historico');
+    });
+
+    // 9. EXPORT & BACKUP TOOLS (EXCEL COMPLETO DE X PARA COM PAGO REAL)
+    document.getElementById('exportBackupBtn').addEventListener('click', () => {
+      const backupData = {
+        appData,
+        expenses,
+        monthHistory,
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup_meubolso_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('exportCsvBtn').addEventListener('click', () => {
+      const now = new Date();
+      const currentMonthStr = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+      const spentFlex = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
+      const flexDiff = appData.flexBudgetGoal - spentFlex;
+
+      const sumEssencialPlan = appData.essencial.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumEssencialPaid = appData.essencial.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+
+      const sumExtrasPlan = appData.extras.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumExtrasPaid = appData.extras.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+
+      const sumCaixinhasPlan = appData.caixinhas.reduce((acc, item) => acc + Number(item.planned || 0), 0);
+      const sumCaixinhasPaid = appData.caixinhas.reduce((acc, item) => acc + Number(item.paid || 0), 0);
+
+      let csv = '=== RELATÓRIO FINANCEIRO CENTRALIZADO (DE X PARA) ===\n';
+      csv += `Mês de Referência;${currentMonthStr}\n`;
+      csv += `Salário Líquido;${appData.salary.toFixed(2).replace('.', ',')}\n\n`;
+
+      // 1. Tabela Comparativa DE x PARA
+      csv += '--- QUADRO COMPARATIVO DE X PARA (MÊS ATUAL) ---\n';
+      csv += 'Grupo;Item;Planejado (DE);Real / Gasto (PARA);Saldo / Diferença;Status\n';
+
+      appData.essencial.forEach(i => {
+        const diff = Number(i.planned) - Number(i.paid);
+        const status = diff === 0 ? 'Conforme o plano' : (diff > 0 ? 'Economia no fixo' : 'Acima do previsto');
+        csv += `Fixo (Essencial);${i.label};${i.planned.toFixed(2).replace('.', ',')};${i.paid.toFixed(2).replace('.', ',')};${diff.toFixed(2).replace('.', ',')};${status}\n`;
+      });
+
+      appData.extras.forEach(i => {
+        const diff = Number(i.planned) - Number(i.paid);
+        const status = diff === 0 ? 'Conforme o plano' : (diff > 0 ? 'Economia no fixo' : 'Acima do previsto');
+        csv += `Fixo (Extras);${i.label};${i.planned.toFixed(2).replace('.', ',')};${i.paid.toFixed(2).replace('.', ',')};${diff.toFixed(2).replace('.', ',')};${status}\n`;
+      });
+
+      appData.caixinhas.forEach(i => {
+        const diff = Number(i.planned) - Number(i.paid);
+        const status = diff === 0 ? 'Aporte integral realizado' : (diff > 0 ? 'Aporte menor que o plano' : 'Aporte extra realizado');
+        csv += `Caixinhas & Reserva;${i.label};${i.planned.toFixed(2).replace('.', ',')};${i.paid.toFixed(2).replace('.', ',')};${diff.toFixed(2).replace('.', ',')};${status}\n`;
+      });
+
+      const flexStatus = flexDiff >= 0 ? 'Dentro do teto' : 'Estourado';
+      csv += `Estilo de Vida;🎯 Bolso Livre (Lazer, Uber, Extras);${appData.flexBudgetGoal.toFixed(2).replace('.', ',')};${spentFlex.toFixed(2).replace('.', ',')};${flexDiff.toFixed(2).replace('.', ',')};${flexStatus}\n\n`;
+
+      // Resumo Geral
+      const totalPlanned = sumEssencialPlan + sumExtrasPlan + sumCaixinhasPlan + appData.flexBudgetGoal;
+      const totalActual = sumEssencialPaid + sumExtrasPaid + sumCaixinhasPaid + spentFlex;
+      const netActualSurplus = appData.salary - totalActual;
+      csv += '--- RESUMO GERAL DO MÊS ---\n';
+      csv += `Total Planejado;${totalPlanned.toFixed(2).replace('.', ',')}\n`;
+      csv += `Total Real Executado;${totalActual.toFixed(2).replace('.', ',')}\n`;
+      csv += `Sobra Real Líquida em Conta;${netActualSurplus.toFixed(2).replace('.', ',')}\n\n`;
+
+      // 2. Histórico de Meses Anteriores Arquivados
+      if (monthHistory.length > 0) {
+        csv += '--- HISTÓRICO DE MESES FECHADOS ---\n';
+        csv += 'Mês;Salário;Fixos Essencial Pagos;Fixos Extras Pagos;Caixinhas Guardadas;Bolso Livre Planejado;Bolso Livre Gasto;Sobra Final;Lançamentos Qtd\n';
+        monthHistory.forEach(m => {
+          csv += `${m.monthLabel};${m.salary.toFixed(2).replace('.', ',')};${m.totalEssencial.toFixed(2).replace('.', ',')};${m.totalExtras.toFixed(2).replace('.', ',')};${m.totalCaixinhas.toFixed(2).replace('.', ',')};${m.flexBudgetGoal.toFixed(2).replace('.', ',')};${m.spentFlex.toFixed(2).replace('.', ',')};${m.netSurplus.toFixed(2).replace('.', ',')};${m.expenses.length}\n`;
+        });
+        csv += '\n';
+      }
+
+      // 3. Extrato detalhado de gastos do Bolso Livre
+      csv += '--- EXTRATO DETALHADO DO BOLSO LIVRE (MÊS ATUAL) ---\n';
+      csv += 'Data;Descrição;Categoria;Forma de Pagamento;Valor (R$)\n';
+      expenses.forEach(e => {
+        csv += `${e.date};"${e.desc.replace(/"/g, '""')}";${getSubcatMeta(e.category).label};${e.paymentMethod};${e.amount.toFixed(2).replace('.', ',')}\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio_financeiro_de_x_para_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('importBackupInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          if (parsed.appData) appData = parsed.appData;
+          if (parsed.expenses) expenses = parsed.expenses;
+          if (parsed.monthHistory) monthHistory = parsed.monthHistory;
+          saveAppData();
+          saveExpenses();
+          saveHistory();
+          renderAll();
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // MODAL 1 HANDLERS
+    const expenseModal = document.getElementById('expenseModal');
+    const openNewExpenseBtn = document.getElementById('openNewExpenseBtn');
+    const closeExpenseModalBtn = document.getElementById('closeExpenseModalBtn');
+    const newExpenseForm = document.getElementById('newExpenseForm');
+
+    function openModal() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('inputDate').value = today;
+      document.getElementById('inputAmount').value = '';
+      document.getElementById('inputDesc').value = '';
+      document.querySelector('input[name="inputSubcat"][value="lazer"]').checked = true;
+      expenseModal.classList.remove('hidden');
+      expenseModal.classList.add('flex');
+      setTimeout(() => document.getElementById('inputAmount').focus(), 100);
+    }
+
+    function closeModal() {
+      expenseModal.classList.add('hidden');
+      expenseModal.classList.remove('flex');
+    }
+
+    openNewExpenseBtn.addEventListener('click', openModal);
+    closeExpenseModalBtn.addEventListener('click', closeModal);
+    expenseModal.addEventListener('click', (e) => {
+      if (e.target === expenseModal) closeModal();
+    });
+
+    newExpenseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('inputAmount').value);
+      const desc = document.getElementById('inputDesc').value.trim();
+      const category = document.querySelector('input[name="inputSubcat"]:checked').value;
+      const paymentMethod = document.getElementById('inputPaymentMethod').value;
+      const date = document.getElementById('inputDate').value;
+
+      if (!amount || amount <= 0 || !desc) return;
+
+      expenses.unshift({
+        id: 'tx_' + Date.now(),
+        amount,
+        desc,
+        category,
+        paymentMethod,
+        date
+      });
+
+      saveExpenses();
+      closeModal();
+    });
+
+    // SALARY & FLEX GOAL MODAL
+    const salaryModal = document.getElementById('salaryModal');
+    const openSalaryModalBtn = document.getElementById('openSalaryModalBtn');
+    const openBudgetGoalModalBtn = document.getElementById('openBudgetGoalModalBtn');
+    const closeSalaryModalBtn = document.getElementById('closeSalaryModalBtn');
+    const salaryForm = document.getElementById('salaryForm');
+
+    function openSalaryModal() {
+      document.getElementById('inputSalaryVal').value = appData.salary;
+      document.getElementById('inputFlexGoalVal').value = appData.flexBudgetGoal;
+      salaryModal.classList.remove('hidden');
+      salaryModal.classList.add('flex');
+    }
+
+    function closeSalaryModal() {
+      salaryModal.classList.add('hidden');
+      salaryModal.classList.remove('flex');
+    }
+
+    openSalaryModalBtn.addEventListener('click', openSalaryModal);
+    openBudgetGoalModalBtn.addEventListener('click', openSalaryModal);
+    closeSalaryModalBtn.addEventListener('click', closeSalaryModal);
+    salaryModal.addEventListener('click', (e) => {
+      if (e.target === salaryModal) closeSalaryModal();
+    });
+
+    salaryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      appData.salary = parseFloat(document.getElementById('inputSalaryVal').value) || 5600;
+      appData.flexBudgetGoal = parseFloat(document.getElementById('inputFlexGoalVal').value) || 1000;
+      saveAppData();
+      closeSalaryModal();
+    });
+
+    // RESET TO DEFAULTS
+    document.getElementById('resetDefaultsBtn').addEventListener('click', () => {
+      appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      saveAppData();
+    });
+
+    document.getElementById('clearMonthExpensesBtn').addEventListener('click', () => {
+      expenses = [];
+      saveExpenses();
+    });
+
+    document.getElementById('txFilterSelect').addEventListener('change', () => {
+      renderExpenseList();
+    });
+
+    // 10. DARK THEME CONTROLS
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem(STORAGE_KEY_THEME, 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem(STORAGE_KEY_THEME, 'light');
+      }
+    }
+    const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(savedTheme === 'dark' || (!savedTheme && prefersDark));
+
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(!isDark);
+    });
+
+    // BOOT
+    window.onload = function() {
+      renderAll();
+    };
+  </script>
+</body>
+</html>
